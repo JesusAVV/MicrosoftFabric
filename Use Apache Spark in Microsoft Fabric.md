@@ -11,11 +11,12 @@
 - **Spark pools**
   
   - ![alt text](spark-pool.png)
-  A Spark pool consists of compute nodes that distribute data processing tasks. The general architecture is shown in the following diagram.
+
+  - A Spark pool consists of compute nodes that distribute data processing tasks. The general architecture is shown in the following diagram.
 
   - As shown in the diagram, a Spark pool contains two kinds of node:
-  1 *.* A head node in a Spark pool coordinates distributed processes through a driver program.
-  2 *.* The pool includes multiple worker nodes on which executor processes perform the actual data processing tasks.
+    1 *.* A head node in a Spark pool coordinates distributed processes through a driver program.
+    2 *.* The pool includes multiple worker nodes on which executor processes perform the actual data processing tasks.
 
   - **Spark pools in Microsoft Fabric**
 
