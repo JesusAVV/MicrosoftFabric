@@ -10,8 +10,8 @@
 
 - **Spark pools**
   
-  - ![alt text](spark-pool.png)
   - A Spark pool consists of compute nodes that distribute data processing tasks. The general architecture is shown in the following diagram.
+  - ![alt text](spark-pool.png)
   - As shown in the diagram, a Spark pool contains two kinds of node:
     1. A head node in a Spark pool coordinates distributed processes through a driver program.
     2. The pool includes multiple worker nodes on which executor processes perform the actual data processing tasks.
@@ -19,8 +19,8 @@
   - **Spark pools in Microsoft Fabric**
 
     - Microsoft Fabric provides a starter pool in each workspace, enabling Spark jobs to be started and run quickly with minimal setup and configuration. You can configure the starter pool to optimize the nodes it contains in accordance with your specific workload needs or cost constraints.
+    - You can manage settings for the starter pool and create new Spark pools in the **Admin portal** section of the workspace settings, under **Capacity settings**, then **Data Engineering/Science Settings**.
     - ![alt text](spark-settings.png)
-    You can manage settings for the starter pool and create new Spark pools in the **Admin portal** section of the workspace settings, under **Capacity settings**, then **Data Engineering/Science Settings**.
     - Specific configuration settings for Spark pools include:
       - **Node Family**: The type of virtual machines used for the Spark cluster nodes. In most cases, memory optimized nodes provide optimal performance.
       - **Autoscale**: Whether or not to automatically provision nodes as needed, and if so, the initial and maximum number of nodes to be allocated to the pool.
@@ -36,8 +36,8 @@
 
   - **Environments in Microsoft Fabric**
     
-    - ![alt text](spark-environment.png)
     - You can create custom environments in a Fabric workspace, enabling you to use specific Spark runtimes, libraries, and configuration settings for different data processing operations.
+    - ![alt text](spark-environment.png)    
     - When creating an environment, you can:
       - Specify the Spark runtime it should use.
       - View the built-in libraries that are installed in every environment.
@@ -81,13 +81,13 @@
 
 - **Notebooks**
   
-  - ![alt text](notebook.png)  
   - When you want to use Spark to explore and analyze data interactively, use a notebook. Notebooks enable you to combine text, images, and code written in multiple languages to create an interactive item that you can share with others and collaborate.
+  - ![alt text](notebook.png)    
 
 - **Spark job definition**
-  
-  - ![alt text](spark-job.png)  
+   
   - If you want to use Spark to ingest and transform data as part of an automated process, you can define a Spark job to run a script on-demand or based on a schedule. To configure a Spark job, create a Spark Job Definition in your workspace and specify the script it should run.
+  - ![alt text](spark-job.png)   
 
 - **Work with data in a Spark dataframe**
 
@@ -106,7 +106,6 @@
 
 - **Inferring a schema**
 
-  - ![alt text](tabla_Inferring_schema.png)  
   - The %%pyspark line at the beginning is called a magic, and tells Spark that the language used in this cell is PySpark. You can select the language you want to use as a default in the toolbar of the Notebook interface, and then use a magic to override that choice for a specific cell.
     ```
     %%pyspark
@@ -116,10 +115,16 @@
     )
     display(df.limit(10))
     ```
+  - The magic %%spark is used to specify Scala.
+    ```
+    %%spark
+    val df = spark.read.format("csv").option("header", "true").load("Files/data/products.csv")
+    display(df.limit(10))
+    ``` 
+  - ![alt text](tabla_Inferring_schema.png)  
 
 - **Specifying an explicit schema**
 
-  - ![alt text](tabla_Specifying_explicit_schema.png)  
   - You can also specify an explicit schema for the data, which is useful when the column names aren't included in the data file, like this CSV example:
     ```
     771,"Mountain-100 Silver, 38",Mountain Bikes,3399.9900
@@ -145,26 +150,27 @@
         header=False)
     display(df.limit(10))
     ```    
+  - ![alt text](tabla_Specifying_explicit_schema.png)  
 
 ### Filtering and grouping dataframes
 
-- ![alt text](tabla_Filtering_grouping_dataframes_1.png)
 - You can use the methods of the Dataframe class to filter, sort, group, and otherwise manipulate the data it contains. For example, the following code example uses the select method to retrieve the ProductID and ListPrice columns from the df dataframe containing product data in the previous example:
   ```    
   pricelist_df = df.select("ProductID", "ListPrice")
   ```    
-- ![alt text](tabla_Filtering_grouping_dataframes_2.png)
+- ![alt text](tabla_Filtering_grouping_dataframes_1.png)
 - You can "chain" methods together to perform a series of manipulations that results in a transformed dataframe. For example, this example code chains the select and where methods to create a new dataframe containing the ProductName and ListPrice columns for products with a category of Mountain Bikes or Road Bikes:
   ```    
   bikes_df = df.select("ProductName", "Category", "ListPrice").where((df["Category"]=="Mountain Bikes") | (df["Category"]=="Road Bikes"))
   display(bikes_df)
   ```    
-- ![alt text](tabla_Filtering_grouping_dataframes_3.png)
+- ![alt text](tabla_Filtering_grouping_dataframes_2.png)  
 - To group and aggregate data, you can use the groupBy method and aggregate functions. For example, the following PySpark code counts the number of products for each category:
   ```    
   counts_df = df.select("ProductID", "Category").groupBy("Category").count()
   display(counts_df)
   ```    
+- ![alt text](tabla_Filtering_grouping_dataframes_3.png)
 
 ### Saving a dataframe
 
@@ -213,7 +219,6 @@
 
 ### Using the Spark SQL API to query data
 
-- ![alt text](tabla_Using_Spark_SQL_API_query_data.png)
 - You can use the Spark SQL API in code written in any language to query data in the catalog. For example, the following PySpark code uses a SQL query to return data from the products table as a dataframe.
   ```          
   bikes_df = spark.sql("SELECT ProductID, ProductName, ListPrice \
@@ -221,10 +226,10 @@
                         WHERE Category IN ('Mountain Bikes', 'Road Bikes')")
   display(bikes_df)
   ```          
+- ![alt text](tabla_Using_Spark_SQL_API_query_data.png)
 
 - **Using SQL code**
 
-- ![alt text](tabla_Using_SQL_code.png)
 - The previous example demonstrated how to use the Spark SQL API to embed SQL expressions in Spark code. In a notebook, you can also use the %%sql magic to run SQL code that queries objects in the catalog, like this:
   ```          
   %%sql
@@ -234,6 +239,7 @@
   GROUP BY Category
   ORDER BY Category
   ```          
+- ![alt text](tabla_Using_SQL_code.png)
 
 ## Visualize data in a Spark notebook
 
@@ -241,8 +247,8 @@
 
 ### Using built-in notebook charts
 
-- ![alt text](notebook-chart.png)
 - When you display a dataframe or run a SQL query in a Spark notebook, the results are displayed under the code cell. By default, results are rendered as a table, but you can also change the results view to a chart and use the chart properties to customize how the chart visualizes the data, as shown here:
+- ![alt text](notebook-chart.png)
 
 ### Using graphics packages in code
 
@@ -276,7 +282,7 @@
   # Show the plot area
   plt.show()
   ```          
-- ![alt text](chart.png)
 - The Matplotlib library requires data to be in a Pandas dataframe rather than a Spark dataframe, so the toPandas method is used to convert it.
+- ![alt text](chart.png)
 - You can use the Matplotlib library to create many kinds of chart; or if preferred, you can use other libraries such as Seaborn to create highly customized charts.
 
